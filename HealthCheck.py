@@ -1,19 +1,19 @@
 import subprocess
 import platform
 
-def get_zfs_filesystems():
+def get_zfs_datasets():
     try:
-        # Get the list of all ZFS filesystems
-        result = subprocess.run(['zfs', 'list', '-o', 'name'], capture_output=True, text=True, check=True)
-        filesystems = result.stdout.strip().split('\n')
+        # Get the list of all ZFS datasets
+        result = subprocess.run(['zfs', 'list', '-o', 'name', '-t', 'filesystem,volume'], capture_output=True, text=True, check=True)
+        datasets = result.stdout.strip().split('\n')
         
-        print("ZFS Filesystems:")
-        for filesystem in filesystems:
-            print(filesystem)
-        print()
-        
+        # Print the datasets
+        for dataset in datasets:
+            print(dataset)
+            
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while running zfs command: {e}")
+    print()
 
 def get_zfs_version():
     try:
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     print("Starting ZFS Health Check...\n")
     get_os_info()
     get_zfs_version()
-    #get_zfs_filesystems()
+    get_zfs_datasets()
     get_zfs_snapshots_count()
     get_zfs_disk_status()
     get_zfs_space()
